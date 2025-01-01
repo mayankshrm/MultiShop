@@ -17,10 +17,10 @@ const CategoryList = async () => {
             key={item._id}
           >
             <div className="relative bg-slate-100 w-full h-96">
-              <Image
+              <img
                 src={item.media?.mainMedia?.image?.url || "cat.png"}
                 alt=""
-                fill
+                
                 sizes="20vw"
                 className="object-cover"
               />

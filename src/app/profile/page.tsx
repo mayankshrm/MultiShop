@@ -8,19 +8,42 @@ import { format } from "timeago.js";
 const ProfilePage = async () => {
   const wixClient = await wixClientServer();
 
-  const user = await wixClient.members.getCurrentMember({
-    fieldsets: [members.Set.FULL],
-  });
-
-  if (!user.member?.contactId) {
-    return <div className="">Not logged in!</div>;
+  let user;
+  try {
+    // Attempt to get the current member
+    user = await wixClient.members.getCurrentMember({
+      fieldsets: [members.Set.FULL],
+    });
+  } catch (error) {
+    console.error("Error fetching member data:", error);
+    user = null;
   }
 
-  const orderRes = await wixClient.orders.searchOrders({
-    search: {
-      filter: { "buyerInfo.contactId": { $eq: user.member?.contactId } },
-    },
-  });
+  if (!user?.member?.contactId) {
+    // Redirect or show a message when no user is logged in
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <h1 className="text-2xl text-red-500">Access Denied</h1>
+        <p className="text-gray-700">You must be logged in to view your profile.</p>
+        <Link href="/login" className="text-blue-500 underline">
+          Login Here
+        </Link>
+      </div>
+    );
+  }
+
+  let orderRes;
+  try {
+    // Fetch orders only if the user is logged in
+    orderRes = await wixClient.orders.searchOrders({
+      search: {
+        filter: { "buyerInfo.contactId": { $eq: user.member.contactId } },
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    orderRes = { orders: [] }; // Fallback to an empty order list
+  }
 
   return (
     <div className="flex flex-col md:flex-row gap-24 md:h-[calc(100vh-180px)] items-center px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
@@ -73,22 +96,26 @@ const ProfilePage = async () => {
       <div className="w-full md:w-1/2">
         <h1 className="text-2xl">Orders</h1>
         <div className="mt-12 flex flex-col">
-          {orderRes.orders.map((order) => (
-            <Link
-              href={`/orders/${order._id}`}
-              key={order._id}
-              className="flex justify-between px-2 py-6 rounded-md hover:bg-green-50 even:bg-slate-100"
-            >
-              <span className="w-1/4">{order._id?.substring(0, 10)}...</span>
-              <span className="w-1/4">
-                ${order.priceSummary?.subtotal?.amount}
-              </span>
-              {order._createdDate && (
-                <span className="w-1/4">{format(order._createdDate)}</span>
-              )}
-              <span className="w-1/4">{order.status}</span>
-            </Link>
-          ))}
+          {orderRes.orders.length === 0 ? (
+            <p className="text-gray-500">No orders found.</p>
+          ) : (
+            orderRes.orders.map((order) => (
+              <Link
+                href={`/orders/${order._id}`}
+                key={order._id}
+                className="flex justify-between px-2 py-6 rounded-md hover:bg-green-50 even:bg-slate-100"
+              >
+                <span className="w-1/4">{order._id?.substring(0, 10)}...</span>
+                <span className="w-1/4">
+                  ${order.priceSummary?.subtotal?.amount}
+                </span>
+                {order._createdDate && (
+                  <span className="w-1/4">{format(order._createdDate)}</span>
+                )}
+                <span className="w-1/4">{order.status}</span>
+              </Link>
+            ))
+          )}
         </div>
       </div>
     </div>

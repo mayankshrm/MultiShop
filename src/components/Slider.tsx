@@ -33,14 +33,30 @@ const slides = [
 
 const Slider = () => {
   const [current, setCurrent] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-  //   }, 3000);
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
-  //   return () => clearInterval(interval);
-  // }, []);
+  // Auto-rotate for mobile
+  useEffect(() => {
+    if (isMobile) {
+      const interval = setInterval(() => {
+        setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+      }, 3000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isMobile]);
 
   return (
     <div className="h-[calc(100vh-80px)] overflow-hidden">
@@ -55,14 +71,14 @@ const Slider = () => {
           >
             {/* TEXT CONTAINER */}
             <div className="h-1/2 xl:w-1/2 xl:h-full flex flex-col items-center justify-center gap-8 2xl:gap-12 text-center">
-              <h2 className="text-xl lg:text-3xl 2xl:text-5xl">
+              <h2 className="text-xl lg:text-3xl 2xl:text-5xl px-4">
                 {slide.description}
               </h2>
-              <h1 className="text-5xl lg:text-6xl 2xl:text-8xl font-semibold">
+              <h1 className="text-5xl lg:text-6xl 2xl:text-8xl font-semibold px-4">
                 {slide.title}
               </h1>
               <Link href={slide.url}>
-                <button className="rounded-md bg-black text-white py-3 px-4 ">
+                <button className="rounded-md bg-black text-white py-3 px-6 text-lg">
                   SHOP NOW
                 </button>
               </Link>
@@ -80,17 +96,17 @@ const Slider = () => {
           </div>
         ))}
       </div>
-      <div className="absolute m-auto left-1/2 bottom-8 flex gap-4">
+      <div className="absolute m-auto left-1/2 bottom-8 flex gap-4 transform -translate-x-1/2">
         {slides.map((slide, index) => (
           <div
-            className={`w-3 h-3  rounded-full ring-1 ring-gray-600 cursor-pointer flex items-center justify-center ${
+            className={`w-4 h-4 md:w-3 md:h-3 rounded-full ring-1 ring-gray-600 cursor-pointer flex items-center justify-center ${
               current === index ? "scale-150" : ""
             }`}
             key={slide.id}
             onClick={() => setCurrent(index)}
           >
             {current === index && (
-              <div className="w-[6px] h-[6px] bg-gray-600 rounded-full"></div>
+              <div className="w-2 h-2 md:w-[6px] md:h-[6px] bg-gray-600 rounded-full"></div>
             )}
           </div>
         ))}

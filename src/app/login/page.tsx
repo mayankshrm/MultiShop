@@ -141,6 +141,7 @@ const LoginPage = () => {
               type="text"
               name="username"
               placeholder="john"
+              autoComplete="off"
               value={username}
               className="ring-2 ring-gray-300 rounded-md p-4"
               onChange={(e) => setUsername(e.target.value)}
@@ -152,8 +153,9 @@ const LoginPage = () => {
             <label className="text-sm text-gray-700">E-mail</label>
             <input
               type="email"
-              name="email"
+              name="custom-email"
               value={email}
+              autoComplete="off"
               placeholder="john@gmail.com"
               className="ring-2 ring-gray-300 rounded-md p-4"
               onChange={(e) => setEmail(e.target.value)}
@@ -165,6 +167,7 @@ const LoginPage = () => {
             <input
               type="text"
               name="emailCode"
+              autoComplete="off"
               value={emailCode}
               placeholder="Code"
               className="ring-2 ring-gray-300 rounded-md p-4"
@@ -178,6 +181,7 @@ const LoginPage = () => {
             <input
               type="password"
               name="password"
+              autoComplete="off"
               value={password}
               placeholder="Enter your password"
               className="ring-2 ring-gray-300 rounded-md p-4"

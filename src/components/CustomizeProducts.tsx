@@ -13,9 +13,7 @@ const CustomizeProducts = ({
   variants: products.Variant[];
   productOptions: products.ProductOption[];
 }) => {
-  const [selectedOptions, setSelectedOptions] = useState<{
-    [key: string]: string;
-  }>({});
+  const [selectedOptions, setSelectedOptions] = useState<any>({});
   const [selectedVariant, setSelectedVariant] = useState<products.Variant>();
 
   useEffect(() => {
@@ -27,10 +25,12 @@ const CustomizeProducts = ({
       );
     });
     setSelectedVariant(variant);
+    setSelectedOptions(variant?.choices)
   }, [selectedOptions, variants]);
-
+  console.log(selectedVariant)
+  console.log(selectedOptions)
   const handleOptionSelect = (optionType: string, choice: string) => {
-    setSelectedOptions((prev) => ({ ...prev, [optionType]: choice }));
+    setSelectedOptions((prev:any) => ({ ...prev, [optionType]: choice }));
   };
 
   const isVariantInStock = (choices: { [key: string]: string }) => {

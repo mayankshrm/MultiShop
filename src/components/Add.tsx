@@ -30,7 +30,7 @@ const Add = ({
   const wixClient = useWixClient();
 
   const { addItem, isLoading } = useCartStore();
-
+console.log(stockNumber)
   return (
     <div className="flex flex-col gap-4">
       <h4 className="font-medium">Choose a Quantity</h4>

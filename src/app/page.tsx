@@ -8,6 +8,7 @@ import { WixClientContext } from "@/context/wixContext";
 import { useWixClient } from "@/hooks/useWixClient";
 import { wixClientServer } from "@/lib/wixClientServer";
 import { Suspense, useContext, useEffect } from "react";
+import FirstPopUp from "@/components/FirstPopUp"
 
 const HomePage = async () => {
 
@@ -34,8 +35,11 @@ const HomePage = async () => {
 
   // console.log(res);
 
+
+
   return (
     <div className="">
+      <FirstPopUp/>
       <Slider />
       <div className="mt-24 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
         <h1 className="text-2xl font-extrabold">Featured Products</h1>

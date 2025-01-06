@@ -90,6 +90,7 @@ const LoginPage = () => {
       }
 
       switch (response?.loginState) {
+        
         case LoginState.SUCCESS:
           setMessage("Successful! You are being redirected.");
           const tokens = await wixClient.auth.getMemberTokensForDirectLogin(
@@ -115,10 +116,13 @@ const LoginPage = () => {
           } else {
             setError("Something went wrong!");
           }
+          break;
         case LoginState.EMAIL_VERIFICATION_REQUIRED:
           setMode(MODE.EMAIL_VERIFICATION);
+          break;
         case LoginState.OWNER_APPROVAL_REQUIRED:
           setMessage("Your account is pending approval");
+          break;
         default:
           break;
       }

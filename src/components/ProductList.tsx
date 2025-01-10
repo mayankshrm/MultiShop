@@ -92,8 +92,8 @@ const ProductList = async ({
                       className="absolute object-cover rounded-md"
                     />
                     {/* Video Player */}
-                    <VideoComponent product={product}/>
-                    {/* <video
+                    {/* <VideoComponent product={product}/> */}
+                    <video
                       src={
                         product.media?.items[1]?.video?.files?.[0]?.url || ""
                       }
@@ -102,7 +102,7 @@ const ProductList = async ({
                       className="absolute w-full h-full object-cover rounded-md"
                       autoPlay={true} // Disable autoplay initially
                       // Pause the video when mouse leaves
-                    /> */}
+                    />
                   </div>
                 ) : (
                   <Image

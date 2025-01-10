@@ -24,32 +24,64 @@ import { useState } from "react";
 
 const ProductImages = ({ items }: { items: any }) => {
   const [index, setIndex] = useState(0);
-
+console.log("======",items)
   return (
     <div className="">
       <div className="h-[500px] relative">
-        <Image
-          src={items[index].image?.url}
-          alt=""
-          fill
-          sizes="50vw"
-          className="object-cover rounded-md"
-        />
+        {items[index]?.mediaType === 'video' ? (
+          <video
+            src={items[index].video?.files?.[0]?.url || ""}
+            controls
+            className="object-cover rounded-md w-full h-full"
+            muted
+            autoPlay
+            loop
+          />
+        ) : (
+          <Image
+            src={items[index]?.image?.url || ""}
+            alt={items[index]?.title || "Image"}
+            fill
+            sizes="50vw"
+            className="object-cover rounded-md"
+          />
+        )}
       </div>
       <div className="flex justify-between gap-4 mt-8">
-        {items.map((item:any, i:number) => (
+        {items.map((item:any, i:any) => (
           <div
             className="w-1/4 h-32 relative gap-4 mt-8 cursor-pointer"
             key={item._id}
             onClick={() => setIndex(i)}
           >
-            <Image
-              src={item.image?.url}
-              alt=""
-              fill
-              sizes="30vw"
-              className="object-cover rounded-md"
-            />
+            {item.mediaType === 'video' ? (
+              // <video
+              //   src={item.video?.files?.[0]?.url || ""}
+              //   className="object-cover rounded-md w-full h-full"
+              //   muted
+              //   loop
+
+              // />
+              <video
+              src={item.video?.files?.[0]?.url || ""}
+  muted
+  loop
+  className="absolute w-full h-full object-cover rounded-md"
+  onMouseEnter={(e:any) => e.target.play()}
+  onMouseLeave={(e:any) => {
+    e.target.pause();
+    e.target.currentTime = 0; // Reset to start when mouse leaves
+  }}
+/>
+            ) : (
+              <Image
+                src={item.image?.url || ""}
+                alt={item.title || "Image"}
+                fill
+                sizes="30vw"
+                className="object-cover rounded-md"
+              />
+            )}
           </div>
         ))}
       </div>

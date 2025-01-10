@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import DOMPurify from "isomorphic-dompurify";
 import Pagination from "./Pagination";
+import VideoComponent from "./VideoComponent";
 
 const PRODUCT_PER_PAGE = 8;
 
@@ -49,6 +50,7 @@ const ProductList = async ({
 
   const res = await productQuery.find();
 
+  
   return (
     <div className="mt-12 flex gap-x-8 gap-y-16 justify-between flex-wrap">
       {res.items.map((product: products.Product) => (
@@ -66,18 +68,58 @@ const ProductList = async ({
               className="absolute object-cover rounded-md z-10 hover:opacity-0 transition-opacity easy duration-500"
             />
             {product.media?.items && (
-              <Image
-                src={product.media?.items[1]?.image?.url || "/product.png"}
-                alt=""
-                fill
-                sizes="25vw"
-                className="absolute object-cover rounded-md"
-              />
+              <>
+                {product.media?.items[1]?.mediaType === "image" ? (
+                  <Image
+                    src={product.media?.items[1]?.image?.url || "/product.png"}
+                    alt={product.media?.items[1]?.title || "Secondary Image"}
+                    fill
+                    sizes="25vw"
+                    className="absolute object-cover rounded-md"
+                  />
+                ) : product.media?.items[1]?.mediaType === "video" ? (
+                  <div className="absolute w-full h-full rounded-md">
+                    {/* Video Thumbnail */}
+                    <Image
+                      src={
+                        product.media?.items[1]?.video?.stillFrameMediaId
+                          ? `https://static.wixstatic.com/media/${product.media?.items[1]?.video?.stillFrameMediaId}`
+                          : "/product.png"
+                      }
+                      alt="Video Thumbnail"
+                      fill
+                      sizes="25vw"
+                      className="absolute object-cover rounded-md"
+                    />
+                    {/* Video Player */}
+                    <VideoComponent product={product}/>
+                    {/* <video
+                      src={
+                        product.media?.items[1]?.video?.files?.[0]?.url || ""
+                      }
+                      muted
+                      loop
+                      className="absolute w-full h-full object-cover rounded-md"
+                      autoPlay={true} // Disable autoplay initially
+                      // Pause the video when mouse leaves
+                    /> */}
+                  </div>
+                ) : (
+                  <Image
+                    src={product.media?.items[1]?.image?.url || "/product.png"}
+                    alt={product.media?.items[1]?.title || "Secondary Image"}
+                    fill
+                    sizes="25vw"
+                    className="absolute object-cover rounded-md"
+                  />
+                )}
+              </>
             )}
           </div>
           <div className="flex justify-between">
             <span className="font-medium">{product.name}</span>
-            <span className="font-semibold">${product.price?.price}</span>
+            <span className="font-semibold">₹{product.price?.discountedPrice
+            }</span>
           </div>
           {product.additionalInfoSections && (
             <div

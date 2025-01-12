@@ -24,16 +24,17 @@ import { useState } from "react";
 
 const ProductImages = ({ items }: { items: any }) => {
   const [index, setIndex] = useState(0);
-console.log("======",items)
+  console.log("======", items);
   return (
     <div className="">
       <div className="h-[500px] relative">
-        {items[index]?.mediaType === 'video' ? (
+        {items[index]?.mediaType === "video" ? (
           <video
             src={items[index].video?.files?.[0]?.url || ""}
             controls
             className="object-cover rounded-md w-full h-full"
             muted
+            playsInline
             autoPlay
             loop
           />
@@ -48,43 +49,39 @@ console.log("======",items)
         )}
       </div>
       <div className="flex justify-between gap-4 mt-8">
-        {items.map((item:any, i:any) => (
-          <div
-            className="w-1/4 h-32 relative gap-4 mt-8 cursor-pointer"
-            key={item._id}
-            onClick={() => setIndex(i)}
-          >
-            {item.mediaType === 'video' ? (
-              // <video
-              //   src={item.video?.files?.[0]?.url || ""}
-              //   className="object-cover rounded-md w-full h-full"
-              //   muted
-              //   loop
+  {items.map((item: any, i: any) => (
+    <div
+      className="w-1/4 h-32 relative gap-4 mt-8 cursor-pointer"
+      key={item._id}
+      onClick={() => setIndex(i)}
+    >
+      {item.mediaType === "video" ? (
+        <video
+          src={item.video?.files?.[0]?.url || ""}
+          muted
+          loop
+          playsInline // Prevents auto full-screen on mobile
+          poster={item.thumbnail.url || ""} // Add poster image
+          className="absolute w-full h-full object-cover rounded-md"
+          onMouseEnter={(e: any) => e.target.play()}
+          onMouseLeave={(e: any) => {
+            e.target.pause();
+            e.target.currentTime = 0; // Reset to start when mouse leaves
+          }}
+        />
+      ) : (
+        <Image
+          src={item.image?.url || ""}
+          alt={item.title || "Image"}
+          fill
+          sizes="30vw"
+          className="object-cover rounded-md"
+        />
+      )}
+    </div>
+  ))}
+</div>
 
-              // />
-              <video
-              src={item.video?.files?.[0]?.url || ""}
-  muted
-  loop
-  className="absolute w-full h-full object-cover rounded-md"
-  onMouseEnter={(e:any) => e.target.play()}
-  onMouseLeave={(e:any) => {
-    e.target.pause();
-    e.target.currentTime = 0; // Reset to start when mouse leaves
-  }}
-/>
-            ) : (
-              <Image
-                src={item.image?.url || ""}
-                alt={item.title || "Image"}
-                fill
-                sizes="30vw"
-                className="object-cover rounded-md"
-              />
-            )}
-          </div>
-        ))}
-      </div>
     </div>
   );
 };

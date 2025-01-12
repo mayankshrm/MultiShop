@@ -49,14 +49,14 @@ const Slider = () => {
 
   // Auto-rotate for mobile
   useEffect(() => {
-    if (isMobile) {
+    
       const interval = setInterval(() => {
         setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
       }, 3000);
 
       return () => clearInterval(interval);
-    }
-  }, [isMobile]);
+    
+  }, []);
 
   return (
     <div className="h-[calc(100vh-80px)] overflow-hidden">

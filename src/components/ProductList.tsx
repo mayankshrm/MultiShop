@@ -99,6 +99,7 @@ const ProductList = async ({
                       }
                       muted
                       loop
+                      playsInline
                       className="absolute w-full h-full object-cover rounded-md"
                       autoPlay={true} // Disable autoplay initially
                       // Pause the video when mouse leaves

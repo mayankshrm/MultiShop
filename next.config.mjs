@@ -18,6 +18,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "app-uploads-cdn.fera.ai",
       },
+      {
+        protocol:"https",
+        hostname:"diib.com"
+      },
+      {
+        protocol:"https",
+        hostname:"i.ibb.co"
+      }
     ],
   },
 };

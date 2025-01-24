@@ -3,6 +3,7 @@ import Menu from "./Menu";
 import Image from "next/image";
 import SearchBar from "./SearchBar";
 import dynamic from "next/dynamic";
+
 // import NavIcons from "./NavIcons";
 
 const NavIcons = dynamic(() => import("./NavIcons"), { ssr: false });
@@ -27,7 +28,7 @@ const Navbar = () => {
           </Link>
           <div className="hidden xl:flex gap-4">
             <Link href="/">Homepage</Link>
-            <Link href="/list?cat=all-products">All Products</Link>
+            <Link href="/list?cat=all-products" prefetch={true}>All Products</Link>
             {/* <Link href="/">Deals</Link>
             <Link href="/">About</Link>
             <Link href="/">Contact</Link> */}

@@ -3,13 +3,14 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BottomNav from "@/components/BottomNav";
 import { WixClientContextProvider } from "@/context/wixContext";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
 export const metadata: Metadata = {
-  title: "MayHite Market",
-  description: "A complete e-commerce application with Next.js and Wix",
+  title: "Zopmart — Daily Essentials for Less",
+  description: "Shop groceries, home goods and daily essentials at the best prices, delivered fast.",
 };
 
 export default function RootLayout({
@@ -19,11 +20,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-surface-soft min-h-screen`}>
         <WixClientContextProvider>
           <Navbar />
-          {children}
+          <main className="pb-16 lg:pb-0">
+            {children}
+          </main>
           <Footer />
+          <BottomNav />
         </WixClientContextProvider>
       </body>
     </html>

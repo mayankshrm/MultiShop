@@ -1,15 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCartStore } from "@/hooks/useCartStore";
 import { media as wixMedia } from "@wix/sdk";
 import { useWixClient } from "@/hooks/useWixClient";
 import { currentCart } from "@wix/ecom";
 
 const CartModal = () => {
-  // TEMPORARY
-  // const cartItems = true;
-
   const wixClient = useWixClient();
   const { cart, isLoading, removeItem } = useCartStore();
 
@@ -38,85 +36,89 @@ const CartModal = () => {
   };
 
   return (
-    <div className="w-max absolute p-4 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-12 right-0 flex flex-col gap-6 z-20">
-      {!cart.lineItems ? (
-        <div className="">Cart is Empty</div>
+    <div className="w-80 sm:w-96 max-h-[80vh] overflow-y-auto absolute rounded-2xl shadow-modal bg-white top-14 right-0 z-20 flex flex-col">
+      {!cart.lineItems || cart.lineItems.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
+          <div className="text-4xl mb-3">🛒</div>
+          <p className="text-sm font-semibold text-ink">Your cart is empty</p>
+          <p className="text-xs text-ink-muted mt-1">Add some items to get started</p>
+        </div>
       ) : (
         <>
-          <h2 className="text-xl">Shopping Cart</h2>
-          {/* LIST */}
-          <div className="flex flex-col gap-8">
-            {/* ITEM */}
+          {/* Sticky header */}
+          <div className="flex items-center justify-between px-5 py-4 border-b border-surface-muted sticky top-0 bg-white z-10">
+            <h2 className="text-base font-bold text-ink">
+              Cart ({cart.lineItems.length})
+            </h2>
+          </div>
+
+          {/* Item list */}
+          <div className="flex flex-col">
             {cart.lineItems.map((item) => (
-              <div className="flex gap-4" key={item._id}>
+              <div
+                key={item._id}
+                className="flex gap-3 px-5 py-4 hover:bg-surface-soft transition-colors border-b border-surface-muted last:border-0"
+              >
                 {item.image && (
                   <Image
-                    src={wixMedia.getScaledToFillImageUrl(
-                      item.image,
-                      72,
-                      96,
-                      {}
-                    )}
-                    alt=""
-                    width={72}
-                    height={96}
-                    className="object-cover rounded-md"
+                    src={wixMedia.getScaledToFillImageUrl(item.image, 64, 80, {})}
+                    alt={item.productName?.original || "Product"}
+                    width={64}
+                    height={80}
+                    className="object-cover rounded-lg shrink-0"
                   />
                 )}
-                <div className="flex flex-col justify-between w-full">
-                  {/* TOP */}
-                  <div className="">
-                    {/* TITLE */}
-                    <div className="flex items-center justify-between gap-8">
-                      <h3 className="font-semibold">
-                        {item.productName?.original}
-                      </h3>
-                      <div className="p-1 bg-gray-50 rounded-sm flex items-center gap-2">
-                        {item.quantity && item.quantity > 1 && (
-                          <div className="text-xs text-green-500">
-                            {item.quantity} x{" "}
-                          </div>
-                        )}
-                        ${item.price?.amount}
-                      </div>
-                    </div>
-                    {/* DESC */}
-                    <div className="text-sm text-gray-500">
+                <div className="flex flex-col justify-between flex-1 min-w-0">
+                  <div>
+                    <h3 className="text-sm font-semibold text-ink leading-snug line-clamp-2">
+                      {item.productName?.original}
+                    </h3>
+                    <p className="text-xs text-ink-muted mt-0.5">
                       {item.availability?.status}
-                    </div>
+                    </p>
                   </div>
-                  {/* BOTTOM */}
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Qty. {item.quantity}</span>
-                    <span
-                      className="text-blue-500"
-                      style={{ cursor: isLoading ? "not-allowed" : "pointer" }}
+                  <div className="flex justify-between items-center mt-2">
+                    <div className="flex items-center gap-1.5 text-xs">
+                      {item.quantity && item.quantity > 1 && (
+                        <span className="text-ink-muted">{item.quantity} ×</span>
+                      )}
+                      <span className="font-bold text-lama">
+                        ₹{item.price?.amount}
+                      </span>
+                    </div>
+                    <button
                       onClick={() => removeItem(wixClient, item._id!)}
+                      disabled={isLoading}
+                      className="text-xs text-ink-muted hover:text-red-500 transition-colors disabled:opacity-50"
                     >
                       Remove
-                    </span>
+                    </button>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-          {/* BOTTOM */}
-          <div className="">
-            <div className="flex items-center justify-between font-semibold">
-              <span className="">Subtotal</span>
-              {/* <span className="">${cart?.subtotal?.amount}</span> */}
+
+          {/* Sticky footer */}
+          <div className="px-5 py-4 sticky bottom-0 bg-white border-t border-surface-muted">
+            <div className="flex justify-between text-sm font-semibold text-ink mb-1">
+              <span>Subtotal</span>
+              <span>₹{(cart as any)?.subtotal?.amount}</span>
             </div>
-            <p className="text-gray-500 text-sm mt-2 mb-4">
-              Shipping and taxes calculated at checkout.
+            <p className="text-xs text-ink-muted mb-3">
+              Shipping calculated at checkout
             </p>
-            <div className="flex justify-between text-sm">
-              <button className="rounded-md py-3 px-4 ring-1 ring-gray-300">
+            <div className="flex gap-2">
+              <Link
+                href="/cart"
+                className="flex-1 text-center rounded-full py-2.5 text-sm font-medium ring-1 ring-surface-muted hover:ring-lama hover:text-lama transition-all duration-200"
+              >
                 View Cart
-              </button>
+              </Link>
               <button
-                className="rounded-md py-3 px-4 bg-black text-white disabled:cursor-not-allowed disabled:opacity-75"
-                disabled={isLoading}
                 onClick={handleCheckout}
+                disabled={isLoading}
+                className="flex-1 rounded-full py-2.5 bg-lama text-white text-sm font-semibold hover:bg-lama-dark transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 Checkout
               </button>

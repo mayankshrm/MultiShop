@@ -1,94 +1,170 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+
+const shopLinks = [
+  ["All Products", "/list?cat=all-products"],
+  ["New Arrivals", "/list?cat=all-products"],
+  ["Deals", "/list?cat=all-products"],
+  ["Featured", "/list?cat=all-products"],
+];
+
+const accountLinks = [
+  ["My Profile", "/profile"],
+  ["My Orders", "/orders"],
+  ["Cart", "/cart"],
+  ["Login", "/login"],
+];
+
+const socialPlatforms = ["facebook", "instagram", "youtube", "pinterest", "x"];
+const paymentIcons = ["discover", "skrill", "paypal", "mastercard", "visa"];
+
+const FooterSection = ({
+  title,
+  links,
+}: {
+  title: string;
+  links: string[][];
+}) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="border-b border-ink/8 md:border-0">
+      {/* Mobile accordion toggle */}
+      <button
+        className="w-full flex items-center justify-between py-3.5 md:hidden"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+      >
+        <span className="text-xs font-bold uppercase tracking-widest text-ink/50">
+          {title}
+        </span>
+        <svg
+          width="14" height="14" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2.5"
+          strokeLinecap="round" strokeLinejoin="round"
+          className={`text-ink/30 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+
+      {/* Desktop heading — always visible */}
+      <h3 className="hidden md:block text-xs font-bold uppercase tracking-widest text-ink/40 mb-5">
+        {title}
+      </h3>
+
+      {/* Links */}
+      <ul
+        className={`overflow-hidden transition-all duration-300 ease-in-out md:!max-h-none md:!opacity-100 space-y-3 ${
+          open ? "max-h-56 opacity-100 pb-4" : "max-h-0 opacity-0 md:pb-0"
+        }`}
+      >
+        {links.map(([label, href]) => (
+          <li key={label}>
+            <Link
+              href={href}
+              className="text-sm text-ink/60 hover:text-lama transition-colors duration-200 font-medium"
+            >
+              {label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 const Footer = () => {
   return (
-    <div className="py-8 px-4 md:px-8 bg-gray-100 mt-16">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col items-center text-center space-y-8">
-          {/* Logo/Brand */}
-          <Link href="/">
-            <div className="text-2xl font-bold text-gray-900">
-              MayHite Market
-            </div>
-          </Link>
+    <footer className="bg-surface-muted border-t border-ink/8 mt-20">
 
-          {/* Contact Info - Now in a row for better space utilization */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-3xl">
-            {/* Address */}
-            <div className="flex items-center p-4 bg-white rounded-lg shadow-sm hover:shadow transition-shadow">
-              <div className="w-8 h-8 bg-gray-50 rounded-full flex items-center justify-center mr-3">
-                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              <address className="not-italic text-gray-600 text-sm text-left">
-                3252 Winding Way<br />
-                Willowbrook, CA 90210
-              </address>
-            </div>
+      {/* Main grid */}
+      <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 pt-12 pb-8 md:pt-16 md:pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-0 md:gap-10">
 
-            {/* Email */}
-            <div className="flex items-center p-4 bg-white rounded-lg shadow-sm hover:shadow transition-shadow">
-              <div className="w-8 h-8 bg-gray-50 rounded-full flex items-center justify-center mr-3">
-                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <span className="text-gray-600 text-sm">hello@lama.dev</span>
-            </div>
-
-            {/* Phone */}
-            <div className="flex items-center p-4 bg-white rounded-lg shadow-sm hover:shadow transition-shadow">
-              <div className="w-8 h-8 bg-gray-50 rounded-full flex items-center justify-center mr-3">
-                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-              </div>
-              <span className="text-gray-600 text-sm">+1 234 567 890</span>
-            </div>
-          </div>
-
-          {/* Social Media - More compact with smaller icons */}
-          <div className="flex justify-center gap-4">
-            {['facebook', 'instagram', 'youtube', 'pinterest', 'x'].map((platform) => (
-              <Link key={platform} href="#" className="group">
-                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:shadow transition-all transform group-hover:-translate-y-1">
-                  <Image 
-                    src={`/${platform}.png`} 
-                    alt={platform} 
-                    width={16} 
-                    height={16} 
-                    className="opacity-80 group-hover:opacity-100" 
+          {/* ── Brand column ── */}
+          <div className="pb-6 md:pb-0 md:col-span-1">
+            <Link href="/" className="inline-block mb-3">
+              <span className="text-2xl font-bold tracking-tight text-ink">
+                Zop<span className="text-lama">mart</span>
+              </span>
+            </Link>
+            <p className="text-sm text-ink/55 leading-relaxed mb-5 max-w-[220px]">
+              Daily essentials at honest prices. Fast delivery, zero fuss.
+            </p>
+            <div className="flex gap-2">
+              {socialPlatforms.map((platform) => (
+                <Link
+                  href="#"
+                  key={platform}
+                  className="w-8 h-8 rounded-full bg-white border border-ink/10 hover:border-lama hover:bg-lama-light flex items-center justify-center transition-all duration-200 shadow-sm"
+                >
+                  <Image
+                    src={`/${platform}.png`}
+                    alt={platform}
+                    width={13}
+                    height={13}
+                    className="opacity-40 group-hover:opacity-100"
                   />
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
+            </div>
           </div>
 
-          {/* Payment Methods - Streamlined layout */}
-          <div className="flex flex-wrap justify-center gap-2">
-            {['discover', 'skrill', 'paypal', 'mastercard', 'visa'].map((payment) => (
-              <div key={payment} className="bg-white p-2 rounded-lg shadow-sm hover:shadow transition-shadow">
-                <Image 
-                  src={`/${payment}.png`} 
-                  alt={payment} 
-                  width={32} 
-                  height={16} 
-                  className="opacity-80 hover:opacity-100" 
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+          {/* ── Shop column ── */}
+          <FooterSection title="Shop" links={shopLinks} />
 
-        {/* Copyright */}
-        <div className="text-center text-gray-500 text-sm border-t border-gray-200 mt-6 pt-6">
-          © 2025 MayHite Market. All rights reserved.
+          {/* ── Account column ── */}
+          <FooterSection title="Account" links={accountLinks} />
+
+          {/* ── Contact column ── */}
+          <div>
+            <div className="border-b border-ink/8 md:border-0">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-ink/40 py-3.5 md:py-0 md:mb-5">
+                Contact
+              </h3>
+            </div>
+            <address className="not-italic space-y-2.5 text-sm text-ink/55 mt-3 md:mt-0 font-medium">
+              <p>3252 Winding Way, Willowbrook, CA</p>
+              <a href="mailto:hello@zopmart.com" className="block hover:text-lama transition-colors">
+                hello@zopmart.com
+              </a>
+              <a href="tel:+12345678900" className="block hover:text-lama transition-colors">
+                +1 234 567 890
+              </a>
+            </address>
+          </div>
+
         </div>
       </div>
-    </div>
+
+      {/* ── Bottom bar ── */}
+      <div className="border-t border-ink/8 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p className="text-xs text-ink/40 font-medium">
+          © 2025 Zopmart. All rights reserved.
+        </p>
+        <div className="flex items-center gap-1.5 flex-wrap justify-center">
+          {paymentIcons.map((payment) => (
+            <div
+              key={payment}
+              className="bg-white border border-ink/8 rounded-md px-2 py-1 shadow-sm hover:border-ink/20 transition-colors"
+            >
+              <Image
+                src={`/${payment}.png`}
+                alt={payment}
+                width={30}
+                height={16}
+                className="opacity-70 hover:opacity-100 transition-opacity"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </footer>
   );
 };
 

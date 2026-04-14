@@ -2,10 +2,107 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---- CSS Variables ---- */
+:root {
+  --color-lama: #F35C7A;
+  --color-lama-light: #FDE8ED;
+  --color-lama-dark: #D94A68;
+  --color-surface-soft: #FAF9F7;
+  --color-ink: #1A1A2E;
+  --radius-card: 12px;
+  --radius-btn: 8px;
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+}
+
+/* ---- Base ---- */
+body {
+  background-color: var(--color-surface-soft);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Scrollbar ---- */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
-
-.scrollbar-hide{
+.scrollbar-hide {
   scrollbar-width: none;
+}
+
+/* ---- Shimmer skeleton ---- */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e8e8e8 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+/* ---- Image zoom utility ---- */
+.img-zoom {
+  overflow: hidden;
+}
+.img-zoom img {
+  transition: transform 0.5s ease;
+}
+.img-zoom:hover img {
+  transform: scale(1.06);
+}
+
+/* ---- Focus ring consistent style ---- */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-lama);
+  outline-offset: 2px;
+}
+
+/* ---- Slider progress bar ---- */
+@keyframes progress {
+  from { width: 0% }
+  to   { width: 100% }
+}
+
+/* ---- Login page — animated gradient mesh blobs ---- */
+@keyframes mesh-1 {
+  0%,100% { transform: translate(0,    0)    scale(1);    }
+  25%     { transform: translate(60px, -45px) scale(1.12); }
+  50%     { transform: translate(30px,  60px) scale(0.94); }
+  75%     { transform: translate(-50px, 20px) scale(1.07); }
+}
+@keyframes mesh-2 {
+  0%,100% { transform: translate(0,    0)    scale(1);    }
+  25%     { transform: translate(-55px, 35px) scale(1.08); }
+  50%     { transform: translate(40px, -50px) scale(0.96); }
+  75%     { transform: translate(25px,  45px) scale(1.05); }
+}
+@keyframes mesh-3 {
+  0%,100% { transform: translate(0,    0)    scale(1);    }
+  25%     { transform: translate(35px,  55px) scale(0.93); }
+  50%     { transform: translate(-45px,-30px) scale(1.10); }
+  75%     { transform: translate(50px, -40px) scale(0.98); }
+}
+@keyframes mesh-4 {
+  0%,100% { transform: translate(0,    0)    scale(1);    }
+  33%     { transform: translate(-40px, 50px) scale(1.06); }
+  66%     { transform: translate(55px, -35px) scale(0.95); }
+}
+.mesh-blob-1 { animation: mesh-1 14s ease-in-out infinite; }
+.mesh-blob-2 { animation: mesh-2 18s ease-in-out infinite; }
+.mesh-blob-3 { animation: mesh-3 22s ease-in-out infinite; }
+.mesh-blob-4 { animation: mesh-4 16s ease-in-out infinite; }
+
+/* ---- Login noise overlay ---- */
+.login-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.032;
+  pointer-events: none;
+  mix-blend-mode: overlay;
 }
